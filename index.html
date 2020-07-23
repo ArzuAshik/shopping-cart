@@ -29,8 +29,8 @@
                            <input id="phnQuantity" type="text" class="form-control text-center" value="1">
                            <button  id="phnPlus" class="btn btn-default"><i class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$ <span id="phnPrice">1219</span></h5>
-                        <img src="images/remove.png" alt="" class="remove-item">
+                        <h5>$ <span id="phnPrice">100</span></h5>
+                        <img id="removePhone" src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
                </div>
@@ -48,8 +48,8 @@
                            <button id="casePlus" class="btn btn-default"><i class="fas fa-plus"></i></button>
 
                         </div>
-                        <h5>$ <span id="casePrice">59</span></h5>
-                        <img src="images/remove.png" alt="" class="remove-item">
+                        <h5>$ <span id="casePrice">20</span></h5>
+                        <img id="removeCase" src="images/remove.png" alt="" class="remove-item">
                      </div>
                   </div>
                </div>
@@ -64,9 +64,9 @@
                      </div>
 
                      <div class="col-md-4 status">
-                        <h5>$ <span id="subtotal">1,278</span></h5>
+                        <h5>$ <span id="subtotal">120</span></h5>
                         <h5>$ <span id="tax">0</span></h5>
-                        <h5>$ <span id="total">1,278</span></h5>
+                        <h5>$ <span id="total">120</span></h5>
                      </div>
                   </div>
                </div>
@@ -77,6 +77,20 @@
          </div>
       </div>
    </section>
+
+   <script>
+      const removePhoneBtn = document.getElementById('removePhone');
+      removePhoneBtn.addEventListener('click', function(event){
+         event.target.parentNode.parentNode.parentNode.parentNode.removeChild(event.target.parentNode.parentNode.parentNode);
+
+      })
+
+
+      const removeCaseBtn = document.getElementById('removeCase');
+      removeCaseBtn.addEventListener('click', function(event){
+         event.target.parentNode.parentNode.parentNode.parentNode.removeChild(event.target.parentNode.parentNode.parentNode);
+      })
+   </script>
 
 
 <script>
@@ -95,6 +109,16 @@
          minusFunction('phnQuantity', 'phnPrice');
       })
 
+
+      casePlus.addEventListener('click', function(){
+         plusFunction('caseQuantity', 'casePrice');
+      })
+
+      caseMinus.addEventListener('click', function(){
+         minusFunction('caseQuantity', 'casePrice');
+      })
+      
+
       function plusFunction(quantityId, priceId){
          const productQuantity = document.getElementById(quantityId);
          const numberOfProduct = parseInt(productQuantity.value);
@@ -104,18 +128,34 @@
 
          currentPrice.innerText = (priceNumber / numberOfProduct) * (numberOfProduct + 1);
          productQuantity.value = numberOfProduct + 1;
+
+         const subTotal = document.getElementById('subtotal');
+         subTotal.innerText = parseFloat(subTotal.innerText) + (priceNumber / numberOfProduct);
+         const tax = parseFloat(document.getElementById('tax').innerText);
+         document.getElementById('tax').innerText = tax + 5;
+         document.getElementById('total').innerText = parseFloat(subTotal.innerText) + tax + 5;
       }
 
       function minusFunction(quantityId, priceId){
          const productQuantity = document.getElementById(quantityId);
          const numberOfProduct = parseInt(productQuantity.value);
 
-         const currentPrice = document.getElementById(priceId);
-         const priceNumber = parseFloat(currentPrice.innerText);
+         if(numberOfProduct > 1){
+            const currentPrice = document.getElementById(priceId);
+            const priceNumber = parseFloat(currentPrice.innerText);
 
-         currentPrice.innerText = (priceNumber / numberOfProduct) * (numberOfProduct - 1);
-         productQuantity.value = numberOfProduct - 1;
+            currentPrice.innerText = (priceNumber / numberOfProduct) * (numberOfProduct - 1);
+            productQuantity.value = numberOfProduct - 1;
+
+            const subTotal = document.getElementById('subtotal');
+            subTotal.innerText = parseFloat(subTotal.innerText) - (priceNumber / numberOfProduct);
+            const tax = parseFloat(document.getElementById('tax').innerText);
+            document.getElementById('tax').innerText = tax - 5;
+            document.getElementById('total').innerText = parseFloat(subTotal.innerText) + tax - 5;
+         }
       }
+
+
    </script>
 </body>
 
