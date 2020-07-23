@@ -79,17 +79,32 @@
    </section>
 
    <script>
+
+
       const removePhoneBtn = document.getElementById('removePhone');
       removePhoneBtn.addEventListener('click', function(event){
+         removeItemCalc("phnPrice");
          event.target.parentNode.parentNode.parentNode.parentNode.removeChild(event.target.parentNode.parentNode.parentNode);
-
       })
 
 
       const removeCaseBtn = document.getElementById('removeCase');
       removeCaseBtn.addEventListener('click', function(event){
+         removeItemCalc("casePrice");
          event.target.parentNode.parentNode.parentNode.parentNode.removeChild(event.target.parentNode.parentNode.parentNode);
       })
+
+
+      function removeItemCalc(priceID){
+         const itemPrice = document.getElementById(priceID).innerText;
+         const price = parseFloat(itemPrice);
+         const subtotal = document.getElementById('subtotal');
+         const total = document.getElementById('total');
+         const tax = document.getElementById('tax');
+         const subTotalPrice = parseFloat(subtotal.innerText) - price;
+         subtotal.innerText = subTotalPrice;
+         totalCalculation(subTotalPrice);
+      }
    </script>
 
 
@@ -130,10 +145,9 @@
          productQuantity.value = numberOfProduct + 1;
 
          const subTotal = document.getElementById('subtotal');
-         subTotal.innerText = parseFloat(subTotal.innerText) + (priceNumber / numberOfProduct);
-         const tax = parseFloat(document.getElementById('tax').innerText);
-         document.getElementById('tax').innerText = tax + 5;
-         document.getElementById('total').innerText = parseFloat(subTotal.innerText) + tax + 5;
+         const subTotalAmount = parseFloat(subTotal.innerText) + (priceNumber / numberOfProduct);
+         subTotal.innerText = subTotalAmount;
+         totalCalculation(subTotalAmount);
       }
 
       function minusFunction(quantityId, priceId){
@@ -148,14 +162,26 @@
             productQuantity.value = numberOfProduct - 1;
 
             const subTotal = document.getElementById('subtotal');
-            subTotal.innerText = parseFloat(subTotal.innerText) - (priceNumber / numberOfProduct);
-            const tax = parseFloat(document.getElementById('tax').innerText);
-            document.getElementById('tax').innerText = tax - 5;
-            document.getElementById('total').innerText = parseFloat(subTotal.innerText) + tax - 5;
+            const subTotalAmount = parseFloat(subTotal.innerText) - (priceNumber / numberOfProduct);
+            subTotal.innerText = subTotalAmount;
+            totalCalculation(subTotalAmount);
          }
       }
 
+      function totalCalculation(subtotal){
+         const tax = subtotal * 0.15;
+         document.getElementById('tax').innerText = tax;
+         document.getElementById('total').innerText = subtotal + tax;
+      }
 
+
+      function onLoadTotalCount(){
+         const subTotal = document.getElementById('subtotal').innerText;
+         const subTotalAmount = parseFloat(subTotal);
+         totalCalculation(subTotalAmount);
+      }
+
+      onLoadTotalCount();      
    </script>
 </body>
 
